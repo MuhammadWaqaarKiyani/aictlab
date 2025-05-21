@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Mart X</title>
+  <link rel="stylesheet" href="prod.css"/>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">Your <span>Mart<i> X</i></span></div>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Products</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Shop the Latest Tech & Lifestyle</h1>
+      <p>Exclusive deals and premium quality gadgets for you.</p>
+    </div>
+  </section>
+
+  <section class="products container">
+    <h2 class="section-title">Our Products</h2>
+    <div class="products-grid" id="product-list"></div>
+  </section>
+
+  <section class="product-detail container" id="product-detail" style="display:none;">
+    <a href="#" class="back-btn" onclick="goBack()">← Back to Products</a>
+    <div class="detail-container">
+      <div class="detail-images">
+        <img id="detail-image" class="main-image" src="" alt="Product" />
+      </div>
+      <div class="detail-info">
+        <h1 id="detail-title"></h1>
+        <div class="price" id="detail-price"></div>
+        <p class="description" id="detail-description"></p>
+        <div class="detail-actions">
+          <button class="btn btn-primary" onclick="addToCart()">Add to Cart</button>
+          <button class="btn btn-secondary" onclick="showCheckout()">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <form class="checkout-form" id="checkout-form" onsubmit="submitOrder(event)" style="display:none;">
+    <h2>Checkout</h2>
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required />
+    </div>
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" required />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" required />
+      </div>
+      <div class="form-group">
+        <label for="zip">Zip Code</label>
+        <input type="text" id="zip" required />
+      </div>
+    </div>
+    <div class="checkout-actions">
+      <button class="btn" type="submit">Place Order</button>
+    </div>
+  </form>
+
+  <footer>
+    <div class="footer-content container">
+      <div class="footer-section">
+        <h3>About</h3>
+        <p>Your Mart X brings you the best deals in tech and lifestyle.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>Email: support@yourmartx.com</p>
+        <p>Phone: +123 456 7890</p>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2025 Your Mart X. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    const products = [
+      { id: 1, name: "Wireless Headphones", price: 59.99, description: "High-quality wireless headphones with noise cancellation.", image: "images/headphones.jpg" },
+      { id: 2, name: "Smart Watch", price: 99.99, description: "Track your fitness and notifications on the go.", image: "images/smartwatch.jpg" },
+      { id: 3, name: "Bluetooth Speaker", price: 29.99, description: "Compact and powerful speaker for music lovers.", image: "images/speaker.jpg" },
+      { id: 4, name: "LED Desk Lamp", price: 19.99, description: "Stylish lamp with adjustable brightness.", image: "images/lamp.jpg" },
+      { id: 5, name: "Digital Camera", price: 249.99, description: "Capture high-res photos and videos with ease.", image: "images/camera.jpg" },
+      { id: 6, name: "Tablet", price: 199.99, description: "Sleek and lightweight tablet for work and play.", image: "images/tablet.jpg" },
+      { id: 7, name: "Wireless Mouse", price: 14.99, description: "Smooth and precise wireless mouse.", image: "images/mouse.jpg" },
+      { id: 8, name: "Travel Backpack", price: 49.99, description: "Durable backpack perfect for commuting or hiking.", image: "images/backpack.jpg" },
+    ];
+
+    const productList = document.getElementById("product-list");
+    const detailSection = document.getElementById("product-detail");
+    const checkoutForm = document.getElementById("checkout-form");
+
+    const detailImage = document.getElementById("detail-image");
+    const detailTitle = document.getElementById("detail-title");
+    const detailPrice = document.getElementById("detail-price");
+    const detailDescription = document.getElementById("detail-description");
+
+    function renderProducts() {
+      productList.innerHTML = "";
+      products.forEach((product) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-image">
+            <img src="${product.image}" alt="${product.name}">
+          </div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <div class="price">$${product.price.toFixed(2)}</div>
+            <button class="btn" onclick="showDetail(${product.id})">View</button>
+          </div>
+        `;
+        productList.appendChild(card);
+      });
+    }
+
+    function showDetail(productId) {
+      const product = products.find(p => p.id === productId);
+      detailImage.src = product.image;
+      detailTitle.textContent = product.name;
+      detailPrice.textContent = `$${product.price.toFixed(2)}`;
+      detailDescription.textContent = product.description;
+      productList.parentElement.style.display = "none";
+      detailSection.style.display = "block";
+      checkoutForm.style.display = "none";
+    }
+
+    function goBack() {
+      detailSection.style.display = "none";
+      checkoutForm.style.display = "none";
+      productList.parentElement.style.display = "block";
+    }
+
+    function showCheckout() {
+      detailSection.style.display = "none";
+      checkoutForm.style.display = "block";
+    }
+
+    function submitOrder(event) {
+      event.preventDefault();
+      alert("Order placed successfully!");
+      checkoutForm.reset();
+      goBack();
+    }
+
+    function addToCart() {
+      alert("Product added to cart!");
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
